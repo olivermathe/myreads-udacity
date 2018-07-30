@@ -78,13 +78,10 @@ const MoreActions = props => {
 
         let className = {};
 
-        console.log(normalAction, normalShelf);
-
-        if (normalAction === normalShelf) {
+        if (normalAction === normalShelf)
           className = classNames([classes.menuItem, classes.selected]);
-        } else {
+        else 
           className = classes.menuItem;
-        }
 
         return (
           <MenuItem key={idx} onClick={handleClose} className={className}>
