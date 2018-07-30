@@ -30,12 +30,13 @@ class SearchPage extends Component {
 
         <div className='container'>
 
+          {/* Loader */}
           {books.length === 0 && (<LinearLoader />)}
 
+          {/* Books */}
           {books.length > 0 && (<Bookcase books={books}/>)}
 
         </div>
-
       </div>
     );
   }
