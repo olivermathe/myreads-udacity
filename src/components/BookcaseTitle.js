@@ -20,7 +20,8 @@ const styles = {
     'margin': '0px'
   },
   title: {
-    'text-transform': 'uppercase',
+    'fontFamily': 'Montserrat',
+    'textTransform': 'uppercase',
     'padding': '0px 20px 0px 20px'
   }
 };
