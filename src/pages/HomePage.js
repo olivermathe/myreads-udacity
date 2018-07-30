@@ -34,7 +34,7 @@ class HomePage extends Component {
 
   render() {
 
-    const { currentlyReading, read, wantToRead } = this.state;
+    const { currentlyReading, read, wantToRead, books } = this.state;
 
     return (
       <div>
@@ -42,7 +42,7 @@ class HomePage extends Component {
         <div className='container'>
 
           {/* LOADER */}
-          {this.state.books.length === 0 && (<LinearLoader/>)} 
+          {books.length === 0 && (<LinearLoader/>)} 
           
           {/* Currently reading books */}
           {currentlyReading.length > 0 && (
