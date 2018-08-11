@@ -25,7 +25,7 @@ class HomePage extends Component {
 
   }
 
-  updateShelf (shelf, id) {
+  updateShelf = (shelf, id) => {
 
     // LOCAL UPDATE
     const books = this.state.books.map(book => {
@@ -48,7 +48,7 @@ class HomePage extends Component {
 
   }
 
-  fillBooksShelf (books) {
+  fillBooksShelf = books => {
 
     const currentlyReading = books.filter(book => book.shelf === 'currentlyReading');
     const wantToRead = books.filter(book => book.shelf === 'wantToRead');
@@ -74,7 +74,7 @@ class HomePage extends Component {
           {/* Currently reading books */}
           {currentlyReading.length > 0 && (
             <Bookcase 
-              onUpdateShelf={this.updateShelf.bind(this)} 
+              onUpdateShelf={this.updateShelf} 
               title='Currently Reading' 
               books={currentlyReading} 
             />
@@ -83,7 +83,7 @@ class HomePage extends Component {
           {/* Want to read books */}
           {wantToRead.length > 0 && (
             <Bookcase 
-              onUpdateShelf={this.updateShelf.bind(this)} 
+              onUpdateShelf={this.updateShelf} 
               title='Want To Read' 
               books={wantToRead} 
             />
@@ -92,7 +92,7 @@ class HomePage extends Component {
           {/* Read books */}
           {read.length > 0 && (
             <Bookcase 
-              onUpdateShelf={this.updateShelf.bind(this)} 
+              onUpdateShelf={this.updateShelf} 
               title='Read' 
               books={read} 
             />

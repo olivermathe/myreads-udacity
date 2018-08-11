@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import { Card, CardMedia, Grid } from "@material-ui/core";
+import { Card, CardMedia, Grid, Grow } from "@material-ui/core";
 
 import BookDetails from "./BookDetails";
 import BookActions from "./BookActions";
@@ -9,11 +9,20 @@ import BookActions from "./BookActions";
 class BookCard extends Component {
 
   state = {
-    anchorEl: null
+    anchorEl: null,
+    grow: true
+  }
+
+  componentWillUnmount () {
+
+    this.setState({ grow: false })
+
   }
 
   toogleMenuActions = anchorEl => {
+
     this.setState({ anchorEl });
+
   };
 
   render() {
@@ -22,33 +31,35 @@ class BookCard extends Component {
     const { anchorEl } = this.state;
 
     return (
-      <Grid item >
-        <Card key={book.id} className={classes.card} >
+      <Grow in={this.state.grow}>
+        <Grid item >
+          <Card key={book.id} className={classes.card} >
 
-          {/* Book details */}
-          <BookDetails
-            toogleMenuActions={this.toogleMenuActions}
-            book={book}
+            {/* Book details */}
+            <BookDetails
+              toogleMenuActions={this.toogleMenuActions}
+              book={book}
+              anchorEl={anchorEl}
+            />
+
+            {/* Book image */}
+            <CardMedia
+              className={classes.cover}
+              image={book.imageLinks.thumbnail}
+              title={book.title}
+            />
+          </Card>
+
+          {/* Shelf control */}
+          <BookActions 
+            toogleMenuActions={this.toogleMenuActions} 
             anchorEl={anchorEl}
+            shelf={book.shelf}
+            bookId={book.id}
+            onUpdateShelf={onUpdateShelf}
           />
-
-          {/* Book image */}
-          <CardMedia
-            className={classes.cover}
-            image={book.imageLinks.thumbnail}
-            title={book.title}
-          />
-        </Card>
-
-        {/* Shelf control */}
-        <BookActions 
-          toogleMenuActions={this.toogleMenuActions} 
-          anchorEl={anchorEl}
-          shelf={book.shelf}
-          bookId={book.id}
-          onUpdateShelf={onUpdateShelf}
-        />
-      </Grid>
+        </Grid>
+      </Grow>
     );
   }
 };

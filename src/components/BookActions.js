@@ -13,7 +13,7 @@ class BookActions extends Component {
     ]
   }
 
-  onClickHandle (action) {
+  onClickHandle = action => {
     
     const { toogleMenuActions, onUpdateShelf, bookId } = this.props;
     
@@ -22,9 +22,9 @@ class BookActions extends Component {
 
   }
 
-  onCloseHandle () {
+  onCloseHandle = () => {
 
-    this.propstoogleMenuActions(null);
+    this.props.toogleMenuActions(null);
 
   }
 
