@@ -17,6 +17,7 @@ const LinearLoader = props => {
 const styles = {
   root: {
     'flexGrow': 1,
+    'margin': '70px'
   },
 };
 

@@ -1,3 +1,11 @@
+body {
+  background: #f3f3f3;
+}
+
 .container {
-  margin-top: 70px
+  margin: 70px auto;
+  display: grid;
+  justify-content: center;
+  max-width: 1165px;
+  width: inherit
 }

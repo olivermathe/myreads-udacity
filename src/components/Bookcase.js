@@ -1,35 +1,46 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+import { Grid } from "@material-ui/core";
 import BookCard from "./BookCard";
 import BookcaseTitle from "./BookcaseTitle";
 
-const Bookcase = props => {
+class Bookcase extends Component {
   
-  const { classes, books, title } = props;
+  static propTypes = {
+    books: PropTypes.array.isRequired
+  }
 
-  return (
-    <div className={classes.root}>
+  render () {
 
-      {title && (<BookcaseTitle title={title} />)}
+    const { classes, books, title, onUpdateShelf } = this.props;
 
-      <div className={classes.body}>
-        {books.map(book => (
-          <BookCard key={book.id} book={book}/>
-        ))}  
+    return (
+      <div className={classes.root}>
+
+        {title && (<BookcaseTitle title={title} />)}
+
+        <Grid container className={classes.body}>
+          {books.map(book => (
+            <BookCard onUpdateShelf={onUpdateShelf} key={book.id} book={book}/>
+          ))}  
+        </Grid>
+
       </div>
-
-    </div>
-  )
+    )
+  }
 };
 
 const styles = theme => ({
   body: {
     'padding': '5px',
-    'display': 'flex',
-    'flexWrap': 'wrap',
-    'justifyContent': 'center',
-    'overflow': 'hidden',
-    'backgroundColor': theme.palette.background.paper,
+    // 'display': 'grid',
+    // 'flexWrap': 'wrap',
+    'gridTemplateColumns': 'repeat(12, 1fr)',
+    'gridGap': `${theme.spacing.unit * 3}px`,
+    // 'justifyContent': 'center',
+    // 'overflow': 'hidden',
+    // 'backgroundColor': theme.palette.background.paper,
   },
   root: {
     'margin-bottom': '50px'

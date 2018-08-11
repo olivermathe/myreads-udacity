@@ -14,9 +14,36 @@ class SearchPage extends Component {
 
   componentDidMount () {
 
-    BooksAPI.getAll()
-      .then(books => this.setState({ books }))
+    BooksAPI.search('SAT')
+      .then(books => {this.setState({ books }); console.log(books)})
       .catch(err => console.error(err))
+
+  }
+
+  updateShelf (shelf, id) {
+    
+    this.setState(state => {
+
+      const books = state.books.map(book => {
+
+        if (book.id === id)
+          book.shelf = shelf;
+
+        return book;
+
+      });
+
+      return {
+        books
+      };
+
+    });
+
+    const book = this.state.books.find(book => book.id === id);
+
+    BooksAPI.update(book, shelf)
+      .then(res => console.log(res))
+      .catch(err => console.error(err));
 
   }
 
@@ -28,13 +55,13 @@ class SearchPage extends Component {
       <div>
         <SearchBar />
 
+        {/* Loader */}
+        {books.length === 0 && (<LinearLoader />)}
+
         <div className='container'>
 
-          {/* Loader */}
-          {books.length === 0 && (<LinearLoader />)}
-
           {/* Books */}
-          {books.length > 0 && (<Bookcase books={books}/>)}
+          {books.length > 0 && (<Bookcase onUpdateShelf={this.updateShelf.bind(this)} books={books}/>)}
 
         </div>
       </div>

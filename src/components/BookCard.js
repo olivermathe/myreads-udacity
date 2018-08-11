@@ -9,7 +9,8 @@ import {
   CardMedia,
   IconButton,
   Menu,
-  MenuItem
+  MenuItem,
+  Grid
 } from "@material-ui/core";
 
 const Content = props => {
@@ -21,20 +22,25 @@ const Content = props => {
       <Typography variant="title" className={classes.title}>
         {book.title}
       </Typography>
-      <Typography variant="subheading" >  
-        <ul className={classes.authors}>
-          {book.authors.map((author, idx) => (
-            <li key={idx} className={classes.author}>{author}</li>
-          ))}
-        </ul>
-      </Typography>
+
+      {book.authors && book.authors.length > 0 && (
+
+        <Typography variant="subheading" >  
+          <ul className={classes.authors}>
+            {book.authors.map((author, idx) => (
+              <li key={idx} className={classes.author}>{author}</li>
+            ))}
+          </ul>
+        </Typography>
+
+      )}
     </CardContent>
   );
 }
 
 const Controls = props => {
 
-  const { classes, anchorEl, handleClick } = props;
+  const { classes, anchorEl, toogleMenuActions } = props;
 
   return (
     <div className={classes.controls}>
@@ -43,7 +49,7 @@ const Controls = props => {
         color='inherit'  
         aria-owns={anchorEl ? 'more-menu' : null}
         aria-haspopup="true"
-        onClick={handleClick}
+        onClick={(e) => toogleMenuActions(e.currentTarget)}
       >
         <MoreIcon className={classes.playIcon}/>
       </IconButton>
@@ -53,39 +59,27 @@ const Controls = props => {
 
 const MoreActions = props => {
 
-  const { anchorEl, handleClose, classes, shelf } = props;
+  const { anchorEl, toogleMenuActions, classes, onUpdateShelf } = props;
 
   const actions = [
-    'Want To Read', 
-    'Currently Reading', 
-    'Read', 
-    'None'
+    {label: 'Want To Read', value: 'wantToRead'}, 
+    {label: 'Read', value: 'read'}, 
+    {label: 'Currently Reading', value: 'currentlyReading'}
   ];
 
-  const normalShelf = shelf.toLowerCase().replace(/ /g,'');
-
   return (
-    <Menu
-      id="more-menu"
-      anchorEl={anchorEl}
-      open={Boolean(anchorEl)}
-      onClose={handleClose}
-    >
+    <Menu id="more-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => toogleMenuActions(null)} >
 
       {actions.length > 0 && actions.map((action, idx) => {
         
-        const normalAction = action.toLowerCase().replace(/ /g,'');
-
-        let className = {};
-
-        if (normalAction === normalShelf)
-          className = classNames([classes.menuItem, classes.selected]);
-        else 
-          className = classes.menuItem;
+        const onClick = () => {
+          toogleMenuActions(null);
+          onUpdateShelf(action.value);
+        };
 
         return (
-          <MenuItem key={idx} onClick={handleClose} className={className}>
-            {action}
+          <MenuItem key={idx} onClick={onClick} className={classes.menuItem}>
+            {action.label}
           </MenuItem>
         );
       })}
@@ -96,7 +90,7 @@ const MoreActions = props => {
 
 const Details = props => {
 
-  const { anchorEl, classes, handleClick, book } = props;
+  const { anchorEl, classes, toogleMenuActions, book } = props;
 
   return (
     <div className={classes.details}>
@@ -105,7 +99,7 @@ const Details = props => {
         classes={classes} 
       />
       <Controls 
-        handleClick={handleClick} 
+        toogleMenuActions={toogleMenuActions} 
         anchorEl={anchorEl} 
         classes={classes}
       />
@@ -119,26 +113,30 @@ class BookCard extends Component {
     anchorEl: null
   }
 
+  toogleMenuActions = anchorEl => {
+    this.setState({ anchorEl });
+  }
+
   handleClick = event => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
-  handleClose = () => {
+  handleClose = (e) => {
     this.setState({ anchorEl: null });
   };
 
   render() {
 
-    const { classes, book } = this.props;
+    const { classes, book, onUpdateShelf } = this.props;
     const { anchorEl } = this.state;
 
     return (
-      <div>
+      <Grid item >
         <Card key={book.id} className={classes.card}>
 
           {/* Book details */}
           <Details
-            handleClick={this.handleClick}
+            toogleMenuActions={this.toogleMenuActions}
             classes={classes}
             book={book}
             anchorEl={anchorEl}
@@ -154,12 +152,13 @@ class BookCard extends Component {
 
         {/* Shelf control */}
         <MoreActions 
-          handleClose={this.handleClose} 
+          toogleMenuActions={this.toogleMenuActions} 
           anchorEl={anchorEl}
           classes={classes}
           shelf={book.shelf}
+          onUpdateShelf={(shelf) => onUpdateShelf(shelf, book.id)}
         />
-      </div>
+      </Grid>
     );
   }
 };
@@ -193,8 +192,6 @@ const styles = theme => ({
     'textTransform': 'uppercase',
     'fontFamily': 'Montserrat',
     'fontSize': '17px',
-    // 'font-style': 'italic',
-    // 'text-decoration': 'underline'
   },
   authors: {
     'color': '#fdfdfd',
@@ -210,13 +207,14 @@ const styles = theme => ({
     'background': '#212121',
     'color': 'white',
     'width': '370px',
-    'height': '200px',
-    'max-height': '200px',
+    'height': '225px',
+    'max-height': '225px',
     'max-width': '370px',
     'margin-top': '10px',
     'margin-left': '5px',
     'margin-right': '5px',
     'display': 'flex',
+    'boxShadow': '2px 4px 10px rgba(0, 0, 0, 0.25)',
   },
   content: {
     'flex': '1 0 auto',
@@ -226,8 +224,8 @@ const styles = theme => ({
   cover: {
     'position': 'absolute',
     'margin-left': '220px',
-    'width': 150,
-    'height': 200,
+    'width': '150px',
+    'height': '225px',
   }
 });
 

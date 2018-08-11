@@ -19,16 +19,41 @@ class HomePage extends Component {
   componentDidMount () {
 
     BooksAPI.getAll()
-      .then(books => {
-
-        const currentlyReading = books.filter(book => book.shelf === 'currentlyReading');
-        const wantToRead = books.filter(book => book.shelf === 'wantToRead');
-        const read = books.filter(book => book.shelf === 'read');
-
-        this.setState({ books, currentlyReading, read, wantToRead });
-
-      })
+      .then(books => this.fillBooksShelf(books))
       .catch(err => console.error(err))
+
+  }
+
+  updateShelf (shelf, id) {
+
+    // LOCAL UPDATE
+    const books = this.state.books.map(book => {
+
+      if (book.id === id) 
+        book.shelf = shelf;
+
+      return book;
+
+    });
+
+    this.fillBooksShelf(books);
+
+    // SERVER UPDATE
+    const book = this.state.books.find(book => book.id === id);
+
+    BooksAPI.update(book, shelf)
+      .then(res => console.log(res))
+      .catch(err => console.error(err));
+
+  }
+
+  fillBooksShelf (books) {
+
+    const currentlyReading = books.filter(book => book.shelf === 'currentlyReading');
+    const wantToRead = books.filter(book => book.shelf === 'wantToRead');
+    const read = books.filter(book => book.shelf === 'read');
+
+    this.setState({ books, currentlyReading, read, wantToRead });
 
   }
 
@@ -39,24 +64,25 @@ class HomePage extends Component {
     return (
       <div>
         <HomeHeader />
+
+         {/* LOADER */}
+         {books.length === 0 && (<LinearLoader/>)} 
+
         <div className='container'>
 
-          {/* LOADER */}
-          {books.length === 0 && (<LinearLoader/>)} 
-          
           {/* Currently reading books */}
           {currentlyReading.length > 0 && (
-            <Bookcase title='Currently Reading' books={currentlyReading} />
+            <Bookcase onUpdateShelf={this.updateShelf.bind(this)} title='Currently Reading' books={currentlyReading} />
           )}
 
           {/* Want to read books */}
           {wantToRead.length > 0 && (
-            <Bookcase title='Want To Read' books={wantToRead} />
+            <Bookcase onUpdateShelf={this.updateShelf.bind(this)} title='Want To Read' books={wantToRead} />
           )}
 
           {/* Read books */}
           {read.length > 0 && (
-            <Bookcase title='Read' books={read} />
+            <Bookcase onUpdateShelf={this.updateShelf.bind(this)} title='Read' books={read} />
           )}
           
           {/* Go to search page */}
