@@ -15,3 +15,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
   - `yarn install`
   - `yarn start`
+  <br><br>  or <br> <br> 
+  - `yarn add serve -g`
+  - `yarn build`
+  - `serve -s build`
