@@ -2,6 +2,10 @@ body {
   background: #f3f3f3;
 }
 
+a {
+  text-decoration: none;
+}
+
 .container {
   margin: 70px auto;
   display: grid;

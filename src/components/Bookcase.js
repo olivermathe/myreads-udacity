@@ -6,10 +6,6 @@ import BookCard from "./BookCard";
 import BookcaseTitle from "./BookcaseTitle";
 
 class Bookcase extends Component {
-  
-  static propTypes = {
-    books: PropTypes.array.isRequired
-  }
 
   render () {
 
@@ -20,9 +16,9 @@ class Bookcase extends Component {
 
         {title && (<BookcaseTitle title={title} />)}
 
-        <Grid container className={classes.body}>
+        <Grid container className={classes.body} >
           {books.map(book => (
-            <BookCard onUpdateShelf={onUpdateShelf} key={book.id} book={book}/>
+            <BookCard onUpdateShelf={onUpdateShelf} key={book.id} book={book} />
           ))}  
         </Grid>
 
@@ -34,17 +30,19 @@ class Bookcase extends Component {
 const styles = theme => ({
   body: {
     'padding': '5px',
-    // 'display': 'grid',
-    // 'flexWrap': 'wrap',
     'gridTemplateColumns': 'repeat(12, 1fr)',
     'gridGap': `${theme.spacing.unit * 3}px`,
-    // 'justifyContent': 'center',
-    // 'overflow': 'hidden',
-    // 'backgroundColor': theme.palette.background.paper,
   },
   root: {
     'margin-bottom': '50px'
   }
 });
+
+Bookcase.propTypes = {
+  classes: PropTypes.object.isRequired,
+  title: PropTypes.string,
+  onUpdateShelf: PropTypes.func.isRequired,
+  books: PropTypes.array.isRequired
+}
 
 export default withStyles(styles)(Bookcase);

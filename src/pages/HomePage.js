@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Hidden } from "@material-ui/core";
 
 import HomeHeader from "../components/HomeHeader";
 import LinearLoader from "../components/LinearLoader";
@@ -72,21 +73,35 @@ class HomePage extends Component {
 
           {/* Currently reading books */}
           {currentlyReading.length > 0 && (
-            <Bookcase onUpdateShelf={this.updateShelf.bind(this)} title='Currently Reading' books={currentlyReading} />
+            <Bookcase 
+              onUpdateShelf={this.updateShelf.bind(this)} 
+              title='Currently Reading' 
+              books={currentlyReading} 
+            />
           )}
 
           {/* Want to read books */}
           {wantToRead.length > 0 && (
-            <Bookcase onUpdateShelf={this.updateShelf.bind(this)} title='Want To Read' books={wantToRead} />
+            <Bookcase 
+              onUpdateShelf={this.updateShelf.bind(this)} 
+              title='Want To Read' 
+              books={wantToRead} 
+            />
           )}
 
           {/* Read books */}
           {read.length > 0 && (
-            <Bookcase onUpdateShelf={this.updateShelf.bind(this)} title='Read' books={read} />
+            <Bookcase 
+              onUpdateShelf={this.updateShelf.bind(this)} 
+              title='Read' 
+              books={read} 
+            />
           )}
           
           {/* Go to search page */}
-          <FabAddButton link='/search' />
+          <Hidden mdUp>
+            <FabAddButton link='/search' />
+          </Hidden>
         </div>
       </div>
     );

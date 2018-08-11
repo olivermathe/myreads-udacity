@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-const LinearLoader = props => {
-
-  const { classes } = props;
+const LinearLoader = ({ classes }) => {
 
   return (
     <div className={classes.root}>
@@ -22,7 +20,7 @@ const styles = {
 };
 
 LinearLoader.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(LinearLoader);

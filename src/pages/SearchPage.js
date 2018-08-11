@@ -9,15 +9,8 @@ import * as BooksAPI from "../BooksAPI";
 class SearchPage extends Component {
 
   state = {
-    books: []
-  }
-
-  componentDidMount () {
-
-    BooksAPI.search('SAT')
-      .then(books => {this.setState({ books }); console.log(books)})
-      .catch(err => console.error(err))
-
+    books: [],
+    isLoading: false
   }
 
   updateShelf (shelf, id) {
@@ -47,21 +40,52 @@ class SearchPage extends Component {
 
   }
 
+  onSearch = query => {
+
+    if (!query.length)
+      return false;
+
+    this.setState({
+      books: [],
+      isLoading: true
+    });
+
+    BooksAPI.search(query)
+      .then(books => {
+        
+        this.setState({ 
+          books,
+          isLoading: false 
+        });
+
+      })
+      .catch(err => {
+
+        console.error(err);
+
+        this.setState({
+          isLoading: false
+        });
+
+      });
+
+  }
+
   render() {
 
-    const { books } = this.state;
+    const { books, isLoading } = this.state;
 
     return (
       <div>
-        <SearchBar />
+        <SearchBar onSearch={this.onSearch} />
 
         {/* Loader */}
-        {books.length === 0 && (<LinearLoader />)}
+        {isLoading && (<LinearLoader />)}
 
         <div className='container'>
 
           {/* Books */}
-          {books.length > 0 && (<Bookcase onUpdateShelf={this.updateShelf.bind(this)} books={books}/>)}
+          {books && books.length > 0 && (<Bookcase onUpdateShelf={this.updateShelf.bind(this)} books={books}/>)}
 
         </div>
       </div>

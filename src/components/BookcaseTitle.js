@@ -1,9 +1,8 @@
 import React from 'react';
+import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 
-const BookcaseTitle = props => {
-
-  const { classes, title } = props;
+const BookcaseTitle = ({ classes, title }) => {
 
   return (
     <div className={classes.title}>
@@ -25,5 +24,10 @@ const styles = {
     'padding': '0px 20px 0px 20px'
   }
 };
+
+BookcaseTitle.prototypes = {
+  classes: PropTypes.object.isRequired,
+  title: PropTypes.string.isRequired
+}
 
 export default withStyles(styles)(BookcaseTitle);

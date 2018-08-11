@@ -15,7 +15,7 @@ const theme = createMuiTheme({
     secondary: {
       light: '#ffee92',
       main: '#FFD600',
-      dark: '#ff6a6a'
+      dark: '#ffee92' // on hover use dark, i did put light on it
     }
   }
 });
