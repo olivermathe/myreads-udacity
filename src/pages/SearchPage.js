@@ -10,10 +10,28 @@ class SearchPage extends Component {
 
   state = {
     books: [],
-    isLoading: false
+    myBooks: [],
+    isLoading: true
   }
 
-  updateShelf (shelf, id) {
+  async componentDidMount () {
+
+    try {
+      
+      const myBooks = await BooksAPI.getAll();
+
+      this.setState({ 
+        myBooks,
+        isLoading: false
+      });
+
+    } catch (err) {
+      console.log(err);
+    }
+
+  }
+
+  updateShelf = async (shelf, id) => {
     
     this.setState(state => {
 
@@ -34,40 +52,67 @@ class SearchPage extends Component {
 
     const book = this.state.books.find(book => book.id === id);
 
-    BooksAPI.update(book, shelf)
-      .then(res => console.log(res))
-      .catch(err => console.error(err));
+    try {
+      await BooksAPI.update(book, shelf);
+    } catch (err) {
+      console.error(err);
+    }
 
   }
 
-  onSearch = query => {
+  setBooksShelf = books => {
 
-    if (!query.length)
+    const myBooks = this.state.myBooks;
+
+    return books.map(book => {
+
+      const myBook = myBooks.find(b => b.id === book.id);
+
+      book.shelf = myBook ? myBook.shelf : 'none';
+
+      return book;
+
+    });
+
+  }
+
+  onSearch = async query => {
+
+    if (!query.length) {
+
+      this.setState({
+        books: []
+      });
+
       return false;
 
+    }
+      
     this.setState({
       books: [],
       isLoading: true
     });
 
-    BooksAPI.search(query)
-      .then(books => {
-        
-        this.setState({ 
-          books,
-          isLoading: false 
-        });
+    try {
+      
+      let books = await BooksAPI.search(query);
 
-      })
-      .catch(err => {
+      books = this.setBooksShelf(books);
 
-        console.error(err);
-
-        this.setState({
-          isLoading: false
-        });
-
+      this.setState({ 
+        books,
+        isLoading: false 
       });
+
+    } catch (err) {
+
+      console.error(err);
+
+      this.setState({
+        isLoading: false
+      });
+      
+    }
 
   }
 
@@ -85,7 +130,7 @@ class SearchPage extends Component {
         <div className='container'>
 
           {/* Books */}
-          {books && books.length > 0 && (<Bookcase onUpdateShelf={this.updateShelf.bind(this)} books={books}/>)}
+          {books && books.length > 0 && (<Bookcase onUpdateShelf={this.updateShelf} books={books}/>)}
 
         </div>
       </div>
