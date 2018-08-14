@@ -30,6 +30,8 @@ class BookCard extends Component {
     const { classes, book, onUpdateShelf } = this.props;
     const { anchorEl } = this.state;
 
+    const image = book.imageLinks ? book.imageLinks.thumbnail : 'http://localhost:3000/public/default-placeholder-750x415.png';
+
     return (
       <Grow in={this.state.grow}>
         <Grid item >
@@ -45,7 +47,7 @@ class BookCard extends Component {
             {/* Book image */}
             <CardMedia
               className={classes.cover}
-              image={book.imageLinks.thumbnail}
+              image={image}
               title={book.title}
             />
           </Card>
