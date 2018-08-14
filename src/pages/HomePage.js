@@ -17,15 +17,21 @@ class HomePage extends Component {
     read: []
   }
 
-  componentDidMount () {
+  async componentDidMount () {
 
-    BooksAPI.getAll()
-      .then(books => this.fillBooksShelf(books))
-      .catch(err => console.error(err))
+    try {
+
+      let books = await BooksAPI.getAll();
+
+      this.fillBooksShelf(books);
+
+    } catch (err) {
+      console.error(err);
+    }
 
   }
 
-  updateShelf = (shelf, id) => {
+  updateShelf = async (shelf, id) => {
 
     // LOCAL UPDATE
     const books = this.state.books.map(book => {
@@ -42,17 +48,26 @@ class HomePage extends Component {
     // SERVER UPDATE
     const book = this.state.books.find(book => book.id === id);
 
-    BooksAPI.update(book, shelf)
-      .then(res => console.log(res))
-      .catch(err => console.error(err));
+    try {
+
+      await BooksAPI.update(book, shelf);
+
+    } catch (err) {
+
+      console.error(err);
+    
+    }
 
   }
 
   fillBooksShelf = books => {
 
-    const currentlyReading = books.filter(book => book.shelf === 'currentlyReading');
-    const wantToRead = books.filter(book => book.shelf === 'wantToRead');
-    const read = books.filter(book => book.shelf === 'read');
+    const filter = books => shelf => books.filter(book => book.shelf === shelf);
+    const filterBy = filter(books);
+
+    const currentlyReading = filterBy('currentlyReading');
+    const wantToRead = filterBy('wantToRead');
+    const read = filterBy('read');
 
     this.setState({ books, currentlyReading, read, wantToRead });
 
