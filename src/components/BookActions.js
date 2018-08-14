@@ -9,7 +9,8 @@ class BookActions extends Component {
     actions: [
       {label: 'Currently Reading', value: 'currentlyReading'},
       {label: 'Want To Read', value: 'wantToRead'}, 
-      {label: 'Read', value: 'read'}, 
+      {label: 'Read', value: 'read'},
+      {label: 'None', value: 'none'}
     ]
   }
 
