@@ -37,16 +37,24 @@ class SearchPage extends Component {
 
       const books = state.books.map(book => {
 
-        if (book.id === id)
-          book.shelf = shelf;
+        if (book.id === id) {
+          
+          return {
+            ...book,
+            shelf
+          }
 
-        return book;
+        } else {
+
+          return book;
+
+        }
 
       });
 
       return {
         books
-      };
+      }
 
     });
 
@@ -95,7 +103,7 @@ class SearchPage extends Component {
 
     try {
       
-      let books = await BooksAPI.search(query);
+      let books = await BooksAPI.search(query) || [];
 
       books = this.setBooksShelf(books);
 
