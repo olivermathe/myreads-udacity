@@ -31,7 +31,7 @@ class BookActions extends Component {
 
   render () {
 
-    const { anchorEl, classes } = this.props;
+    const { anchorEl, classes, shelf } = this.props;
     const { actions } = this.state;
 
     return (
@@ -47,6 +47,7 @@ class BookActions extends Component {
             key={idx} 
             onClick={() => this.onClickHandle(action.value)} 
             className={classes.menuItem}
+            selected={shelf && shelf === action.value}
           >
             {action.label}
           </MenuItem>
@@ -71,7 +72,8 @@ BookActions.proptypes = {
   onUpdateShelf: PropTypes.func.isRequired,
   toogleMenuActions: PropTypes.func.isRequired,
   anchorEl: PropTypes.string,
-  bookId: PropTypes.string.isRequired
+  bookId: PropTypes.string.isRequired,
+  shelf: PropTypes.string
 }
 
 export default withStyles(styles)(BookActions);
