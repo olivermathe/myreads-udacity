@@ -16,6 +16,12 @@ class SearchPage extends Component {
 
   async componentDidMount () {
 
+    this.getAll();
+
+  }
+
+  getAll = async () => {
+
     try {
       
       const myBooks = await BooksAPI.getAll();
@@ -61,9 +67,15 @@ class SearchPage extends Component {
     const book = this.state.books.find(book => book.id === id);
 
     try {
+
       await BooksAPI.update(book, shelf);
+
+      this.getAll();
+
     } catch (err) {
+
       console.error(err);
+
     }
 
   }
