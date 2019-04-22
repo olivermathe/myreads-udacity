@@ -108,7 +108,7 @@ class HomePage extends Component {
           {read.length > 0 && (
             <Bookcase 
               onUpdateShelf={this.updateShelf} 
-              title='Read' 
+              title='Reads' 
               books={read} 
             />
           )}
